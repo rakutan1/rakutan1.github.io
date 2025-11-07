@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خلاصه درس هایی از قرآن</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- تنظیمات کلی و متغیرها --- */
+        :root {
+            --bg-color: #1a1a2e;
+            --card-bg-color: #16213e;
+            --primary-color: #0f3460;
+            --accent-color: #e94560;
+            --text-color: #f5f5f5;
+            --text-secondary: #b8b8b8;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #1a1a2e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid var(--primary-color);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-color), #f47068);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .week-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .week-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.4), transparent);
+            transition: left 0.6s;
+        }
+        .week-card:hover::before { left: 100%; }
+        .week-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(233, 69, 96, 0.3);
+            border-color: var(--accent-color);
+        }
+        .week-card i {
+            font-size: 3rem; color: var(--accent-color); margin-bottom: 15px;
+            transition: transform 0.5s ease;
+        }
+        .week-card:hover i { transform: rotateY(360deg); }
+
+        .week-content { padding: 20px; }
+        .back-button {
+            background-color: var(--primary-color); color: var(--text-color); border: none;
+            padding: 12px 25px; border-radius: 50px; font-size: 1rem;
+            font-family: 'Vazirmatn', sans-serif; cursor: pointer;
+            transition: all 0.3s ease; margin-bottom: 30px;
+        }
+        .back-button:hover {
+            background-color: var(--accent-color); transform: scale(1.05);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+        .week-content h2 {
+            font-size: 2rem; margin-bottom: 30px; padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .content-block {
+            background-color: var(--card-bg-color); border-right: 5px solid;
+            padding: 25px; border-radius: 10px; margin-bottom: 25px;
+            opacity: 0; transform: translateY(50px);
+        }
+        .content-block.visible { animation: fadeInUp 0.8s ease forwards; }
+        .content-block h3 { margin-top: 0; }
+        .summary-block { border-color: #16a085; }
+        .verses-block { border-color: #2874a6; }
+        .exam-questions-block { border-color: #f39c12; }
+        .contest-questions-block { border-color: #8e44ad; }
+
+        .collapsible {
+            background-color: var(--primary-color); color: var(--text-color); cursor: pointer;
+            padding: 15px; width: 100%; border: none; text-align: right; outline: none;
+            font-size: 1.1rem; font-family: 'Vazirmatn', sans-serif;
+            transition: background-color 0.3s; border-radius: 8px; margin-top: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .collapsible:hover { background-color: var(--accent-color); }
+        .collapsible-content {
+            padding: 0 15px; max-height: 0; overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .collapsible-content.show { padding-top: 20px; max-height: 2000px; }
+        .collapsible i { transition: transform 0.3s ease; }
+        .collapsible.active i { transform: rotate(180deg); }
+
+        .icon-list { list-style: none; padding-right: 0; }
+        .icon-list li {
+            padding: 10px 0; display: flex; align-items: center;
+            border-bottom: 1px dashed var(--primary-color); transition: transform 0.3s ease;
+        }
+        .icon-list li:hover { transform: translateX(10px); }
+        .icon-list li:last-child { border-bottom: none; }
+        .icon-list li i {
+            color: var(--accent-color); margin-left: 15px; font-size: 1.2rem;
+            width: 25px; text-align: center;
+        }
+
+        .callout {
+            background-color: rgba(46, 204, 113, 0.1); border: 1px solid var(--success-color);
+            border-radius: 8px; padding: 15px; margin: 20px 0; display: flex;
+            align-items: center; transition: transform 0.3s ease;
+        }
+        .callout:hover { transform: scale(1.02); }
+        .callout i { color: var(--success-color); font-size: 1.5rem; margin-left: 15px; }
+        .callout p { margin: 0; font-weight: 500; }
+
+        .highlight {
+            background-color: var(--warning-color); color: var(--bg-color);
+            padding: 2px 6px; border-radius: 4px; font-weight: 500;
+        }
+
+        table {
+            width: 100%; border-collapse: collapse; margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid var(--primary-color); padding: 12px; text-align: right;
+        }
+        th { background-color: var(--primary-color); color: var(--text-color); }
+        tbody tr:nth-child(even) { background-color: rgba(15, 52, 96, 0.3); }
+        tbody tr:hover { background-color: rgba(233, 69, 96, 0.1); }
+        
+        strong { color: var(--accent-color); }
+
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding-top: 30px;
+            border-top: 1px solid var(--primary-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>خلاصه درس هایی از قرآن</h1>
+        </header>
+
+        <main id="main-content">
+            
+            <section id="home-view" class="view active fade-in-up">
+                <h2 style="text-align: center; font-size: 1.8rem;">لطفاً هفته مورد نظر را انتخاب کنید:</h2>
+                <div class="weeks-grid">
+                    <div class="week-card fade-in-up" onclick="showWeek('week1')" style="animation-delay: 0.1s;">
+                        <i class="fas fa-calendar-week"></i>
+                        <h3>هفته ۱</h3>
+                        <p>در حال آماده‌سازی...</p>
+                    </div>
+                    <div class="week-card fade-in-up" onclick="showWeek('week2')" style="animation-delay: 0.2s;">
+                        <i class="fas fa-calendar-week"></i>
+                        <h3>هفته ۲</h3>
+                        <p>در حال آماده‌سازی...</p>
+                    </div>
+                    <div class="week-card fade-in-up" onclick="showWeek('week3')" style="animation-delay: 0.3s;">
+                        <i class="fas fa-calendar-week"></i>
+                        <h3>هفته ۳</h3>
+                        <p>شناخت ظرفیت انسان</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="week1" class="view week-content">
+                <button class="back-button" onclick="showHome()"><i class="fas fa-arrow-right"></i> بازگشت به خانه</button>
+                <h2>خلاصه برنامه - قسمت ۱</h2>
+                <div class="content-block summary-block"><h3>🟩 خلاصه مطالب برنامه</h3><p>محتوای این هفته به زودی اضافه می‌شود.</p></div>
+            </section>
+
+            <section id="week2" class="view week-content">
+                <button class="back-button" onclick="showHome()"><i class="fas fa-arrow-right"></i> بازگشت به خانه</button>
+                <h2>خلاصه برنامه - قسمت ۲</h2>
+                <div class="content-block summary-block"><h3>🟩 خلاصه مطالب برنامه</h3><p>محتوای این هفته به زودی اضافه می‌شود.</p></div>
+            </section>
+
+            <section id="week3" class="view week-content">
+                <button class="back-button" onclick="showHome()"><i class="fas fa-arrow-right"></i> بازگشت به خانه</button>
+                <h2>خلاصه برنامه - قسمت ۳: شناخت ظرفیت انسان</h2>
+                
+                <div class="content-block summary-block">
+                    <h3>🟩 خلاصه مطالب برنامه</h3>
+                    
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۱) سرمایه‌های مهم دوران جوانی</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <ul class="icon-list">
+                            <li><i class="fas fa-hourglass-half"></i>عمر</li>
+                            <li><i class="fas fa-heart"></i>سلامتی</li>
+                            <li><i class="fas fa-bolt"></i>نشاط و انرژی</li>
+                        </ul>
+                        <p>➡️ خدا به ما این‌ها رو داده تا <span class="highlight">کار بزرگ کنیم</span> نه اینکه فقط درس بخونیم و دیپلم بگیریم.</p>
+                        <p><strong>نکته امتحانی:</strong> جوانی = بهترین زمان رشد، یادگیری و خدمت به مردم.</p>
+                    </div>
+
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۲) نمونه یک انسان با ظرفیت بالا</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <p>روحانی‌ای که:</p>
+                        <ul class="icon-list">
+                            <li><i class="fas fa-university"></i>برای نابیناها مؤسسه آموزشی ساخت</li>
+                            <li><i class="fas fa-hands-helping"></i>برای یتیم‌ها انجمن مددکاری راه انداخت</li>
+                            <li><i class="fas fa-user-graduate"></i>باعث شد صدها نفر باسواد، پزشک و مستقل شوند</li>
+                        </ul>
+                        <p>بدون مقام و مسئولیت فقط با همت خودش!</p>
+                        <div class="callout"><i class="fas fa-check-circle"></i><p>✅ پیام: یک نفر می‌تواند هزار نفر را بسازد!</p></div>
+                    </div>
+
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۳) خدا کار خیر را جبران می‌کند</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <p>اگر:</p>
+                        <ul class="icon-list">
+                            <li><i class="fas fa-ban"></i>گناه نکردی بخاطر خدا</li>
+                            <li><i class="fas fa-comment-slash"></i>حرف بد نزدی چون خدا راضی نبود</li>
+                            <li><i class="fas fa-coins"></i>پول حرام نگرفتی</li>
+                        </ul>
+                        <p>🔹 خدا در دنیا جبران می‌کند</p>
+                        <p>مثال جراح و تاجر → نیکیِ تاجر بعدها به خودش برگشت و خدا مشکلش را حل کرد.</p>
+                        <p><strong>این اسم خداست: الْجَبّار = جبران‌کننده</strong></p>
+                    </div>
+
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۴) خدمت به مردم، در پرتو دعا و ارتباط با خدا</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <p>آدم‌های بزرگ بدون نمایش عبادت می‌کنن.</p>
+                        <p>عبادت واقعی = از دل برای خدا</p>
+                        <div class="callout"><i class="fas fa-pray"></i><p>✅ حتی دعا و گریه پنهانی انرژی و ظرفیت انسان را زیاد می‌کند.</p></div>
+                    </div>
+
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۵) اول واجب، بعد مستحب</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <p>اگر کسی خمس و زکات نمی‌دهد ولی مسجد و مدرسه می‌سازد → کارش قبول نیست.</p>
+                        <p>کار خیر باید از راه درست و با <span class="highlight">لقمه حلال</span> باشد.</p>
+                        <p><strong>مثال چای در آفتابه:</strong> کار خیر اگر با شرط‌های دین انجام نشود → ظاهرش خوبه ولی قبول نیست.</p>
+                    </div>
+
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۶) ظرفیت را هدر ندهیم</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <p>قدرت جوانی را نباید خرج گوشی، فضای مجازی، و وقت‌کشی کرد.</p>
+                        <p>نوجوان باید:</p>
+                        <ul class="icon-list">
+                            <li><i class="fas fa-tools"></i>مهارت یاد بگیرد</li>
+                            <li><i class="fas fa-book"></i>کتاب خوب بخواند</li>
+                            <li><i class="fas fa-star"></i>آدم ارزشمند شود</li>
+                        </ul>
+                    </div>
+
+                    <button class="collapsible"><h4 style="margin:0; display:inline;">۷) دشمن پیشرفت جوانان را نمی‌خواهد</h4> <i class="fas fa-chevron-down"></i></button>
+                    <div class="collapsible-content">
+                        <p>آیه آل‌عمران می‌گوید دشمنان:</p>
+                        <p>اگر شما موفق شوید → ناراحت می‌شوند.</p>
+                        <p>پس:</p>
+                        <p>استقلال علمی و فکری خیلی مهمه.</p>
+                        <p>نباید اجازه دهیم افکار دشمن ما را مسموم کند.</p>
+                    </div>
+                </div>
+
+                <div class="content-block verses-block">
+                    <h3>🟦 آیات + معنی کوتاه + نکته امتحانی</h3>
+                    <table>
+                        <thead><tr><th>آیه</th><th>اشاره</th><th>معنی</th><th>نکته</th></tr></thead>
+                        <tbody>
+                            <tr><td>ضحی 6-8</td><td>یتیم بودن، راهنمایی خدا، بی‌نیاز شدن</td><td>خدا با پیامبر بود و او را بالا برد</td><td>پیامبر هم روزی یتیم بود ولی ظرفیت داشت</td></tr>
+                            <tr><td>آل‌عمران 120</td><td>ناراحتی دشمن از پیشرفت مؤمن</td><td>دشمن خیر ما را نمی‌خواهد</td><td>مراقب اثر رسانه و فضای مجازی باشیم</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-block exam-questions-block">
+                    <h3>🟨 سوالات احتمالی امتحان (با جواب سریع حفظی)</h3>
+                    <table>
+                        <thead><tr><th>سوال</th><th>جواب کوتاه</th></tr></thead>
+                        <tbody>
+                            <tr><td>مهم‌ترین سرمایه جوان چیست؟</td><td>عمر + سلامتی + نشاط</td></tr>
+                            <tr><td>پیام درس روحانیِ فعال چیست؟</td><td>یک نفر می‌تواند نسل‌ها را بسازد</td></tr>
+                            <tr><td>خدا کار خیر را چگونه جبران می‌کند؟</td><td>در همین دنیا → جبران الهی</td></tr>
+                            <tr><td>چرا عبادت پنهانی مهم است؟</td><td>چون ظرفیت روحی را زیاد می‌کند</td></tr>
+                            <tr><td>چرا کارهای مستحب باید بعد از واجب انجام شود؟</td><td>چون کارهای غیر واجب بدون واجب قبول نمی‌شود</td></tr>
+                            <tr><td>دشمن چرا از پیشرفت ما ناراحت می‌شود؟</td><td>چون نمی‌خواهد ما قوی شویم</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-block contest-questions-block">
+                    <h3>🟪 سوالات مسابقه (با گزینه درست) ✅</h3>
+                    <ol>
+                        <li>سوره ضحی به کدام ویژگی پیامبر اشاره دارد؟<br>→ <strong>گزینه ۱: یتیم بودن</strong></li>
+                        <li>پیامبر چه کسانی را از مسجد بیرون کرد؟<br>→ <strong>گزینه ۳: تارکان زکات و انفاق</strong></li>
+                        <li>اقامه نماز در مسجد از چه نوع شرایط است؟<br>→ <strong>گزینه ۳: شرایط کمال</strong></li>
+                        <li>آل‌عمران آیه ۱۲۰ اشاره به چیست؟<br>→ <strong>گزینه ۱: اگر خیری به شما برسد ناراحت می‌شوند</strong></li>
+                        <li>کدام از شرایط قبولی نماز است؟<br>→ <strong>گزینه ۲: لقمه حلال</strong></li>
+                    </ol>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="fade-in-up">
+            <p>Made with Rakutan</p>
+        </footer>
+    </div>
+
+    <script>
+        function showWeek(weekId) {
+            const allViews = document.querySelectorAll('.view');
+            allViews.forEach(view => view.classList.remove('active'));
+            const selectedWeek = document.getElementById(weekId);
+            if (selectedWeek) {
+                selectedWeek.classList.add('active');
+                setTimeout(() => handleScrollAnimation(), 100);
+            }
+        }
+        function showHome() {
+            const allViews = document.querySelectorAll('.view');
+            allViews.forEach(view => view.classList.remove('active'));
+            document.getElementById('home-view').classList.add('active');
+        }
+        
+        const collapsibles = document.querySelectorAll(".collapsible");
+        collapsibles.forEach(item => {
+            item.addEventListener("click", function() {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                content.classList.toggle("show");
+            });
+        });
+
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        function handleScrollAnimation() {
+            const blocks = document.querySelectorAll('.week-content.active .content-block');
+            blocks.forEach(block => { observer.observe(block); });
+        }
+    </script>
+
+</body>
+</html>
