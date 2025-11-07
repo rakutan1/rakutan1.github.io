@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- تنظیمات کلی و متغیرها --- */
+       
         :root {
             --bg-color: #1a1a2e;
             --card-bg-color: #16213e;
@@ -50,6 +50,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+
+
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -74,12 +82,6 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
             animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
 
         .view { display: none; }
@@ -211,6 +213,75 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
+
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header {
+                padding: 20px 0;
+                margin-bottom: 20px;
+            }
+
+            .weeks-grid {
+                grid-template-columns: 1fr; 
+                gap: 15px;
+            }
+
+            .week-card {
+                padding: 20px;
+            }
+
+            .week-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .week-content {
+                padding: 10px;
+            }
+
+            .week-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .content-block {
+                padding: 15px;
+            }
+
+            .collapsible {
+                font-size: 1rem;
+                padding: 12px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+        
+            .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            table {
+                min-width: 600px;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -335,28 +406,32 @@
 
                 <div class="content-block verses-block">
                     <h3>🟦 آیات + معنی کوتاه + نکته امتحانی</h3>
-                    <table>
-                        <thead><tr><th>آیه</th><th>اشاره</th><th>معنی</th><th>نکته</th></tr></thead>
-                        <tbody>
-                            <tr><td>ضحی 6-8</td><td>یتیم بودن، راهنمایی خدا، بی‌نیاز شدن</td><td>خدا با پیامبر بود و او را بالا برد</td><td>پیامبر هم روزی یتیم بود ولی ظرفیت داشت</td></tr>
-                            <tr><td>آل‌عمران 120</td><td>ناراحتی دشمن از پیشرفت مؤمن</td><td>دشمن خیر ما را نمی‌خواهد</td><td>مراقب اثر رسانه و فضای مجازی باشیم</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>آیه</th><th>اشاره</th><th>معنی</th><th>نکته</th></tr></thead>
+                            <tbody>
+                                <tr><td>ضحی 6-8</td><td>یتیم بودن، راهنمایی خدا، بی‌نیاز شدن</td><td>خدا با پیامبر بود و او را بالا برد</td><td>پیامبر هم روزی یتیم بود ولی ظرفیت داشت</td></tr>
+                                <tr><td>آل‌عمران 120</td><td>ناراحتی دشمن از پیشرفت مؤمن</td><td>دشمن خیر ما را نمی‌خواهد</td><td>مراقب اثر رسانه و فضای مجازی باشیم</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="content-block exam-questions-block">
                     <h3>🟨 سوالات احتمالی امتحان (با جواب سریع حفظی)</h3>
-                    <table>
-                        <thead><tr><th>سوال</th><th>جواب کوتاه</th></tr></thead>
-                        <tbody>
-                            <tr><td>مهم‌ترین سرمایه جوان چیست؟</td><td>عمر + سلامتی + نشاط</td></tr>
-                            <tr><td>پیام درس روحانیِ فعال چیست؟</td><td>یک نفر می‌تواند نسل‌ها را بسازد</td></tr>
-                            <tr><td>خدا کار خیر را چگونه جبران می‌کند؟</td><td>در همین دنیا → جبران الهی</td></tr>
-                            <tr><td>چرا عبادت پنهانی مهم است؟</td><td>چون ظرفیت روحی را زیاد می‌کند</td></tr>
-                            <tr><td>چرا کارهای مستحب باید بعد از واجب انجام شود؟</td><td>چون کارهای غیر واجب بدون واجب قبول نمی‌شود</td></tr>
-                            <tr><td>دشمن چرا از پیشرفت ما ناراحت می‌شود؟</td><td>چون نمی‌خواهد ما قوی شویم</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead><tr><th>سوال</th><th>جواب کوتاه</th></tr></thead>
+                            <tbody>
+                                <tr><td>مهم‌ترین سرمایه جوان چیست؟</td><td>عمر + سلامتی + نشاط</td></tr>
+                                <tr><td>پیام درس روحانیِ فعال چیست؟</td><td>یک نفر می‌تواند نسل‌ها را بسازد</td></tr>
+                                <tr><td>خدا کار خیر را چگونه جبران می‌کند؟</td><td>در همین دنیا → جبران الهی</td></tr>
+                                <tr><td>چرا عبادت پنهانی مهم است؟</td><td>چون ظرفیت روحی را زیاد می‌کند</td></tr>
+                                <tr><td>چرا کارهای مستحب باید بعد از واجب انجام شود؟</td><td>چون کارهای غیر واجب بدون واجب قبول نمی‌شود</td></tr>
+                                <tr><td>دشمن چرا از پیشرفت ما ناراحت می‌شود؟</td><td>چون نمی‌خواهد ما قوی شویم</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <div class="content-block contest-questions-block">
